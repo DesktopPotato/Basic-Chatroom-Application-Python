@@ -6,32 +6,32 @@ In a chatroom, users can instantly communicate with each other and send text mes
 <br>
 - The job of the server is to get messages from the client and to broadcast it to every other client. <br>
 - The job of the client is to send messages to, and receive messages from the server. <br>
-<br>
+
 ### Some details:
-	- TCP is used as the transport layer protocol. <br>
-	- This application is not truly asyncronous: It polls each socket on every cycle and uses selectors instead of threads. <br>
-	- The clients can leave the server whenever they want by typing "QUIT" as the message. <br>
-	- The GUI is implemented in a terminal-based GUI library called curses. <br>
-	- Messages are not persistent (they are only printed to the screen, not stored anywhere). <br>
-	- *The user receives messages in real time as long as the user himself is not typing anything in the message field. Even then, as soon as the user finishes typing and submits his/her message, he/she will receive all the messages that had arrived in the duration of the user typing the message. * * (This is due to curses.getkey() blocking the execution flow. For more details, please check line 10's third point in the algorithm given ahead).<br>
+- TCP is used as the transport layer protocol. 
+	- This application is not truly asyncronous: It polls each socket on every cycle and uses selectors instead of threads.
+	- The clients can leave the server whenever they want by typing "QUIT" as the message.
+	- The GUI is implemented in a terminal-based GUI library called curses. 
+	- Messages are not persistent (they are only printed to the screen, not stored anywhere).
+	- *The user receives messages in real time as long as the user himself is not typing anything in the message field. Even then, as soon as the user finishes typing and submits his/her message, he/she will receive all the messages that had arrived in the duration of the user typing the message. * * (This is due to curses.getkey() blocking the execution flow. For more details, please check line 10's third point in the algorithm given ahead.
 
 ## Algorithms:
 ### 1) Server:
 Global variables: A common buffer (commonbuff)to store all incoming messages from clients: Implemented as a list. A dictionary mapping client addresses to usernames (users). <br>
 <br>
 **Part A**<br>
-	1. Start server. <br>
-	2. Create a socket as the listening/welcoming socket for this server program. <br>
-	3. Bind the socket to the given address and port, and set it's state to 'listening', and setblocking state to False to prevent the socket's accept/recv from blocking the execution of the program.<br>
-	4. Register the socket to the OS selectors.<br>
+	1. Start server.
+	2. Create a socket as the listening/welcoming socket for this server program.
+	3. Bind the socket to the given address and port, and set it's state to 'listening', and setblocking state to False to prevent the socket's accept/recv from blocking the execution of the program.
+	4. Register the socket to the OS selectors.
 <br>
 **Part B**: Event loop<br>
-	5. While True, assign burst as the length of the common-buffer.<br>
-	6. Use selectors to get the states of all the connected sockets (whether they're ready to read/write, etc).<br>
-	7. For every socket, service the socket.<br>
-	    	- Socket being serviced is the listening socket:<br>
-	We have a new client trying to connect: Accept the connection and get the new socket to which the client will be connected. For each new socket, there will be a dedicated address, an input buffer and and output buffer associated with it. Then, let this socket be registered to the selectors. After this, the very first data received from the socket will be the username for the client. So, map the address of this client with it's username, and send messages to all other clients that a new user has joined the server.<br>
-	    	- Socket being serviced is a client's socket:<br>
+	5. While True, assign burst as the length of the common-buffer.
+	6. Use selectors to get the states of all the connected sockets (whether they're ready to read/write, etc).
+	7. For every socket, service the socket.
+	    	- Socket being serviced is the listening socket.
+	We have a new client trying to connect: Accept the connection and get the new socket to which the client will be connected. For each new socket, there will be a dedicated address, an input buffer and and output buffer associated with it. Then, let this socket be registered to the selectors. After this, the very first data received from the socket will be the username for the client. So, map the address of this client with it's username, and send messages to all other clients that a new user has joined the server.
+	    	- Socket being serviced is a client's socket:
 	There are cases here:<br>
 	1. The socket is ready to read: Receive data from the socket. If the data is not null, append this data to the common-buffer. If the data is null, this means that the client has left the connection, so close the socket and unregister it, and also send a message to all other clients stating that this user has left the server.<br>
 	2. The socket is ready to write: If there are any messages in the common-buffer, then send each of those messages to this client, in-order.<br>

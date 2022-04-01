@@ -1,27 +1,22 @@
 # Basic-Chatroom-Application-Python<br>
 A chatroom application that I made in my 4th semester, in the course "Computer Networks".<br>
-<br>
-***<br>
-<br>
-## Abstract<br>
-<br>
+***
+## Abstract
 In a chatroom, users can instantly communicate with each other and send text messages that are seen by every user, in real time. The implementation uses the client-server approach, where one server always remains on, and clients can connect to the server and send messages that can be seen by every other client connected to the server. Each client can have his/her own name. <br>
 <br>
 - The job of the server is to get messages from the client and to broadcast it to every other client. <br>
 - The job of the client is to send messages to, and receive messages from the server. <br>
 <br>
-### Some details: <br>
+### Some details:
 	- TCP is used as the transport layer protocol. <br>
 	- This application is not truly asyncronous: It polls each socket on every cycle and uses selectors instead of threads. <br>
 	- The clients can leave the server whenever they want by typing "QUIT" as the message. <br>
 	- The GUI is implemented in a terminal-based GUI library called curses. <br>
 	- Messages are not persistent (they are only printed to the screen, not stored anywhere). <br>
-	- * The user receives messages in real time as long as the user himself is not typing anything in the message field. Even then, as soon as the user finishes typing and submits his/her message, he/she will receive all the messages that had arrived in the duration of the user typing the message. * * (This is due to curses.getkey() blocking the execution flow. For more details, please check line 10's third point in the algorithm given ahead).<br>
-<br>
-<br>
-<br>
-##Algorithms: <br>
-### 1) Server: <br>
+	- *The user receives messages in real time as long as the user himself is not typing anything in the message field. Even then, as soon as the user finishes typing and submits his/her message, he/she will receive all the messages that had arrived in the duration of the user typing the message. * * (This is due to curses.getkey() blocking the execution flow. For more details, please check line 10's third point in the algorithm given ahead).<br>
+
+## Algorithms:
+### 1) Server:
 Global variables: A common buffer (commonbuff)to store all incoming messages from clients: Implemented as a list. A dictionary mapping client addresses to usernames (users). <br>
 <br>
 **Part A**<br>
@@ -86,7 +81,7 @@ Part D: Exiting the program<br>
 	14. Un-register the socket from the OS selector, and then close the socket.<br>
 <br>
 <br>
-## Screenshots:<br>
+## Screenshots:
 <br>
 <br>
 All users joined in

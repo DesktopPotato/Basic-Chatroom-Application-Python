@@ -80,22 +80,21 @@ Part D: Exiting the program<br>
 	13. Before exiting the program, the socket's input buffer must be emptied. This is done by calling recv on the socket again.<br>
 	14. Un-register the socket from the OS selector, and then close the socket.<br>
 <br>
-<br>
+
 ## Screenshots:
-<br>
-<br>
+
+
+
 All users joined in
-![All users joined in](./1.jpg)<br>
-<br>
-<br>
+![All users joined in](./1.jpg)
+
 Some messages sent
-![Some messages sent](./2.png)<br>
-<br>
-<br>
+![Some messages sent](./2.png)
+
 One user left
-![One user left](./3.jpg)<br>
-<br>
-<br>
+![One user left](./3.jpg)
+
 For leaving, type QUIT in the message prompt
-![For leaving: type QUIT in the message prompt](./4.jpg)<br>
+![For leaving: type QUIT in the message prompt](./4.jpg)
+
 
